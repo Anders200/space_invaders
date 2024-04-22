@@ -1,23 +1,44 @@
 #pragma once
 
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/Audio.hpp>
+#include <SFML/Network.hpp>
+
+
 #ifndef GAME_H
 #define GAME_H
 
 class Game
 {
 private:
-    
-/*
-class that acts as the game engine
-*/
+    //variables
+    //window
+    sf::RenderWindow* window;
+    sf::VideoMode videoMode;
+    sf::Event ev;
 
+    //game objects
+    sf::RectangleShape player;
+    sf::RectangleShape enemy;
+    
+    void initVariables();
+    void initWindow();
+    void initPlayer();
+    void initEnemies();
 public:
     //Constructor //Destructor
     Game();
     virtual ~Game();
 
-    //Functions
 
+    //Accessors
+    const bool running() const;
+
+
+    //Functions
+    void pollEvent();
     void update();
     void render();
 };
