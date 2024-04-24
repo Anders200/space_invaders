@@ -8,6 +8,9 @@
 #include <SFML/Network.hpp>
 
 
+#include "player.h"
+#include "bullet.h"
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -21,13 +24,15 @@ private:
     sf::Event ev;
 
     //game objects
-    sf::RectangleShape player;
+    Player player;
     sf::RectangleShape enemy;
+    bullet* playerBullet;
     
     void initVariables();
     void initWindow();
     void initPlayer();
     void initEnemies();
+    void fireBullet();
 public:
     //Constructor //Destructor
     Game();

@@ -14,10 +14,9 @@ void Game::initWindow()
 }
 void Game::initPlayer()
 {
-    this->player.setSize(sf::Vector2f(50.0f, 50.0f));
-    this->player.setFillColor(sf::Color::White);
-    this->player.setPosition(sf::Vector2f(10.0f, 10.0f));
+    Player player;
 }
+
 void Game::initEnemies() {
     this->enemy.setPosition(sf::Vector2f(100.0f, 100.0f));
     this->enemy.setSize(sf::Vector2f(50.0f, 50.0f));
@@ -25,12 +24,28 @@ void Game::initEnemies() {
     this->enemy.setOutlineColor(sf::Color::Black);
     this->enemy.setOutlineThickness(1.0f);
 }
+void Game::fireBullet() {
+    // Only create a new bullet if there isn't one already
+    playerBullet = player.shoot();
+    std::cout << "Firing bullet" << std::endl;
+    std::cout << "Player bullet: " << &playerBullet << std::endl;
+    if (playerBullet != nullptr) {
+        if (playerBullet->getIsPlayerBullet()) {
+            std::cout << "Moving player bullet" << std::endl;
+            playerBullet->move(1.f); 
+            std::cout << "Player bullet moved" << std::endl;
+        } else {
+            playerBullet->move(-1.f); // move down
+        }
+    }
+}
 //constructor
 Game::Game()
 {
     this->initVariables();
     this->initWindow();
     this->initEnemies();
+    this->playerBullet = nullptr;
 }
 //destructor
 Game::~Game()
@@ -55,8 +70,15 @@ void Game::pollEvent()
                 this->window->close();
                 break;
             case sf::Event::KeyPressed:
-                if (this->ev.key.code == sf::Keyboard::Escape)
+                if (this->ev.key.code == sf::Keyboard::Escape) {
                     this->window->close();
+                } else if (this->ev.key.code == sf::Keyboard::A) {
+                    this->player.move('l');
+                } else if (this->ev.key.code == sf::Keyboard::D) {
+                    this->player.move('r');
+                } else if (this->ev.key.code == sf::Keyboard::Space) {
+                    this->fireBullet();
+                }
                 break;
         }
     }
@@ -68,9 +90,18 @@ void Game::update() //all the logic, moving, positon, collision, etc
 
     
     this->pollEvent(); //event polling
-
+    if (playerBullet != nullptr) {
+        playerBullet->move(1.f);
+        
+        // Check if the bullet is off the screen
+        if (playerBullet->getPosition().y < 0) {
+            // Delete the bullet if it's off the screen
+            delete playerBullet;
+            playerBullet = nullptr;
+        }
+    }
     //update mouse position
-    std::cout << "Mouse Pos: " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
+    //std::cout << "Mouse Pos: " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
     
 }
 void Game::render() //renders game objects
@@ -78,6 +109,9 @@ void Game::render() //renders game objects
     this->window->clear();
     //draw game
     this->window->draw(this->enemy);
-
+    this->window->draw(this->player);
+    if (playerBullet != nullptr) {
+        this->window->draw(*playerBullet);
+    }
     this->window->display();
 }
