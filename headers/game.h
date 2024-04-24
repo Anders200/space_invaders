@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
@@ -35,11 +36,10 @@ public:
 
     //Accessors
     const bool running() const;
-
-
-    //Functions
     void pollEvent();
     void update();
+
+    //Functions 
     void render();
 };
 
