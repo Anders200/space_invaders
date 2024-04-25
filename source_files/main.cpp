@@ -2,7 +2,7 @@
 #include "../headers/game.h"
 
 
-//g++ src/main.cpp -lsfml-graphics -lsfml-window -lsfml-system
+//g++ source_files/main.cpp source_files/game.cpp -lsfml-graphics -lsfml-window -lsfml-system
 
 
 int main()
