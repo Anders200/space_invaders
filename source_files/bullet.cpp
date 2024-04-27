@@ -20,7 +20,7 @@ bullet::bullet(bool isPlayerBullet, sf::Vector2f position)
 
 bullet::~bullet()
 {
-
+   
 }
 void bullet::move(float speed) {
     setPosition(sf::Vector2f(getPosition().x, getPosition().y - speed));

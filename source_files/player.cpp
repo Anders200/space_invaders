@@ -1,7 +1,7 @@
 #include "../headers/player.h"
 
 Player::Player() {
-    setPosition(sf::Vector2f(400.0f, 500.0f));
+    setPosition(sf::Vector2f(400.0f, 700.0f));
     setSize(sf::Vector2f(50.0f, 50.0f));
     setFillColor(sf::Color::Blue);
     setOutlineColor(sf::Color::White);
@@ -17,10 +17,11 @@ void Player::move(char direction) {
     if(direction == 'l') {
         // Move player left
         setPosition(sf::Vector2f(getPosition().x - 5, getPosition().y));
-        
     } else if(direction == 'r') {
         // Move player right
         setPosition(sf::Vector2f(getPosition().x + 5, getPosition().y));
+    } else if(direction == 'n') {
+        // Do nothing
     }
 }
 

@@ -1,6 +1,3 @@
-#ifndef BULLET_H
-#define BULLET_H
-
 #pragma once
 
 #include <iostream>
@@ -13,8 +10,9 @@ public:
     ~bullet();
     void move(float speed);
     bool getIsPlayerBullet() { return isPlayerBullet; }
+    sf::FloatRect getGlobalBounds() const {
+        return sf::RectangleShape::getGlobalBounds();
+    }
 private:
     bool isPlayerBullet;
 };
-
-#endif
