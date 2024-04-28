@@ -9,6 +9,7 @@ Enemy::Enemy(Type type, sf::Vector2f position)
     setOutlineColor(sf::Color::White);
     setOutlineThickness(1.0f);
     setType(type);
+    enemySpeed = 0.41667f;
 
 
     switch (type)
@@ -40,8 +41,14 @@ Enemy::~Enemy()
 void Enemy::move()
 {
     // Move the enemy
-    setPosition(getPosition().x + 1, getPosition().y);
+    setPosition(getPosition().x + enemySpeed, getPosition().y);
 }
 void Enemy::setType(Type type) {
     this->type = type;
+}
+void Enemy::setSpeed(float speed) {
+    enemySpeed = speed;
+}
+float Enemy::getSpeed() {
+    return enemySpeed;
 }

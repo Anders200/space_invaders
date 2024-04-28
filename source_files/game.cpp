@@ -1,17 +1,20 @@
 #include "../headers/game.h"
 //private functions
+
+
 void Game::initVariables()
 {
     this->window = nullptr;
     
 }
+
 void Game::initWindow()
 {
     this -> videoMode = sf::VideoMode(1000, 800);
     this->window = new sf::RenderWindow(this->videoMode, "SPACE INVADERS", sf::Style::Close | sf::Style::Titlebar);
     this->window->setFramerateLimit(60);
-    
 }
+
 void Game::initPlayer()
 {
     this->player = Player();
@@ -43,8 +46,10 @@ void Game::initEnemies()
         {
             enemies[j+3][i] = new Enemy(Type::donker, sf::Vector2f(leftBound + i * 50, 265 + j * 55));
         }
+ 
     }
 }
+
 void Game::fireBullet() {
     // Only create a new bullet if there isn't one already
 
@@ -59,12 +64,15 @@ void Game::fireBullet() {
         }
     }
 }
+
 void Game::addEnemyBullet(bullet* b) {
     enemyBullets.push_back(b);
 }
+
 void Game::removeEnemyBullet(bullet* b) {
     enemyBullets.erase(std::remove(enemyBullets.begin(), enemyBullets.end(), b), enemyBullets.end());
 }
+
 void Game::updateEnemyBullets() {
     for (int i = 0; i < enemyBullets.size(); i++) {
         bullet* b = enemyBullets.at(i);
@@ -75,15 +83,78 @@ void Game::updateEnemyBullets() {
     }
 }
 
+void Game::checkForCollisions() {
+    if (playerBullet == nullptr) {
+        return;
+    }
+
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 11; j++) {
+            if (enemies[i][j] != NULL) {
+                sf::FloatRect intersection;
+                if (playerBullet->getGlobalBounds().intersects(enemies[i][j]->getGlobalBounds(), intersection)) {
+                    // Collision occurred, handle it
+                    delete enemies[i][j];
+                    enemies[i][j] = NULL;
+                    delete playerBullet;
+                    playerBullet = nullptr;
+                    break; // Break out of the loop
+                }
+            }
+        }
+        if (playerBullet == nullptr) {
+            break; // Break out of the loop if the bullet has been deleted
+        }
+    }
+    
+}
+
+void Game::update_enemies_position() {
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 11; j++) {
+            if (this->enemies[i][j] != NULL) {
+                sf::Vector2f position = this->enemies[i][j]->getPosition();
+                float speed = this->enemies[i][j]->getSpeed();
+                // Only add speed to x coordinate
+                this->enemies[i][j]->setPosition(position.x + speed, position.y);
+            }
+        }
+    }
+}
+
+void Game::move_enemies() {
+    if(this->enemies[0][0]->getPosition().x < this->leftBound || this->enemies[0][10]->getPosition().x > this->rightBound) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 11; j++) {
+                if (this->enemies[i][j] != NULL) {
+                    this->enemies[i][j]->setSpeed(-this->enemies[i][j]->getSpeed());
+                    this->enemies[i][j]->setPosition(this->enemies[i][j]->getPosition().x, this->enemies[i][j]->getPosition().y + 20);
+                }
+            }
+        }
+    }
+    for (int i = 0; i < 5; i++) {
+        for (int j = 0; j < 11; j++) {
+            if (this->enemies[i][j] != NULL) {
+                this->enemies[i][j]->move();
+                std::cout << "moving" << std::endl;
+            }
+        }
+    }
+    // Rest of your code...
+} 
+
 //constructor
 Game::Game()
 {
     this->initVariables();
     this->initWindow();
     this->initEnemies();
+    this->enemySpeed = 0.2f;
     this->playerBullet = nullptr;
 }
 //destructor
+
 Game::~Game()
 {
     for (int i = 0; i < 5; ++i)
@@ -142,7 +213,7 @@ void Game::pollEvent()
 //functions
 void Game::update() //all the logic, moving, positon, collision, etc
 {
-
+    
     this->updateEnemyBullets();
 
     this->pollEvent(); //event polling
@@ -156,7 +227,10 @@ void Game::update() //all the logic, moving, positon, collision, etc
         }
     }
     // Enemy movement
-
+    this->move_enemies();
+    
+    this->update_enemies_position();
+    
     
     // Player movement
 
@@ -166,7 +240,7 @@ void Game::update() //all the logic, moving, positon, collision, etc
         this->player.move('r');
     }
     // Collision detection
-    
+    checkForCollisions();
     //update mouse position
     //std::cout << "Mouse Pos: " << sf::Mouse::getPosition(*this->window).x << " " << sf::Mouse::getPosition(*this->window).y << std::endl;
     
