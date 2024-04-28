@@ -33,7 +33,8 @@ private:
     Direction playerDirectionD = Direction::None;
     Enemy*** enemies;
     std::vector <bullet*> enemyBullets;
-
+    long int frameCounter;
+    float enemySpeed;
 
     int const leftBound = 100;
     int const rightBound = 900;
@@ -44,11 +45,12 @@ private:
     void initPlayer();
     void initEnemies();
     void fireBullet();
+    void checkForCollisions();
 public:
     //Constructor //Destructor
     Game();
     virtual ~Game();
-
+    
 
     //Accessors
     const bool running() const;
@@ -60,6 +62,8 @@ public:
     void render();
     void addEnemyBullet(bullet* b);
     void removeEnemyBullet(bullet* b);
+    void move_enemies();
+    void update_enemies_position();
 };
 
 #endif // GAME_H

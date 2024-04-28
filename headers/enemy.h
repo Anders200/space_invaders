@@ -18,7 +18,10 @@ public:
     void move();
     bullet* shoot();
     void setType(Type type);
+    void setSpeed(float speed);
+    float getSpeed();
 private:
+    float enemySpeed;
     Type type;
     int score;
     float shootingChance;
