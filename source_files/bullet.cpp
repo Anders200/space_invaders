@@ -24,5 +24,4 @@ bullet::~bullet()
 }
 void bullet::move(float speed) {
     setPosition(sf::Vector2f(getPosition().x, getPosition().y - speed));
-    std::cout << "Bullet moved to:" << getPosition().x << ", " << getPosition().y << std::endl; // Fix the output statement
-}
+    }

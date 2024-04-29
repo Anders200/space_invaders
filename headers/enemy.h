@@ -20,7 +20,10 @@ public:
     void setType(Type type);
     void setSpeed(float speed);
     float getSpeed();
+    int getScore() { return score; };
+
 private:
+    int index; //you will iterate through indexes to shoot
     float enemySpeed;
     Type type;
     int score;
