@@ -52,3 +52,10 @@ void Enemy::setSpeed(float speed) {
 float Enemy::getSpeed() {
     return enemySpeed;
 }
+bullet* Enemy::shoot() {
+    // Get the enemy's position
+    sf::Vector2f position = this->getPosition();
+    // Create a new bullet at the enemy's position
+    bullet* newBullet = new bullet(false, position);
+    return newBullet;
+}

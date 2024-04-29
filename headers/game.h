@@ -9,6 +9,7 @@
 #include <SFML/Network.hpp>
 
 
+
 #include "player.h"
 #include "bullet.h"
 #include "enemy.h"
@@ -26,6 +27,11 @@ private:
     sf::Event ev;
 
     //game objects
+
+    sf::Font font;
+    sf::Text scoreText;
+    int score;
+
     Player player;
     bullet* playerBullet;
     enum class Direction { None, Left, Right };
@@ -33,6 +39,7 @@ private:
     Direction playerDirectionD = Direction::None;
     Enemy*** enemies;
     std::vector <bullet*> enemyBullets;
+    std::vector <Enemy*> livingEnemies;
     long int frameCounter;
     float enemySpeed;
 
@@ -44,8 +51,10 @@ private:
     void initWindow();
     void initPlayer();
     void initEnemies();
+    void initScore();
     void fireBullet();
     void checkForCollisions();
+    void findWhichEnemiesShoot();
 public:
     //Constructor //Destructor
     Game();
@@ -60,7 +69,7 @@ public:
 
     //Functions 
     void render();
-    void addEnemyBullet(bullet* b);
+    void enemyShoot(bullet* b);
     void removeEnemyBullet(bullet* b);
     void move_enemies();
     void update_enemies_position();
